@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { environment } from '../environments/environment';
@@ -18,7 +19,7 @@ import { ProfileComponent } from './profile/profile.component';
     AngularFireAuthModule,
     FormsModule,
   ],
-  providers: [],
+  providers: [AngularFireAuthGuard],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
