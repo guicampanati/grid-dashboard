@@ -1,4 +1,13 @@
-<header><h2>grid-dashboard</h2></header>
+<header>
+  <h2>grid-dashboard</h2>
+  <button
+    *ngIf="auth.user | async"
+    class="ui secondary button logout"
+    (click)="logout()"
+  >
+    Logout
+  </button>
+</header>
 
 <div class="app">
   <div class="ui container">
