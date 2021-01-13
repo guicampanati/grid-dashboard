@@ -40,4 +40,8 @@ export class AuthService {
       this.afs.doc(`users/${userProfile.uid}`).set(userProfile);
     });
   }
+
+  async updateUserDocument(userProfile: UserProfile): Promise<void> {
+    return await this.afs.doc(`users/${userProfile.uid}`).update(userProfile);
+  }
 }
