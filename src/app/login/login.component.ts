@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../core/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,11 @@ export class LoginComponent implements OnInit {
   loading = false;
   action: 'login' | 'signup' = 'login';
   error: string;
-  constructor(private auth: AngularFireAuth, private router: Router) {}
+  constructor(
+    private auth: AngularFireAuth,
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -36,6 +41,7 @@ export class LoginComponent implements OnInit {
         await res.user.updateProfile({
           displayName: `${firstName} ${lastName}`,
         });
+        await this.authService.createUserDocument();
         loginForm.reset();
       } else {
         res = await this.auth.signInWithEmailAndPassword(email, password);
