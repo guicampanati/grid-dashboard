@@ -3,9 +3,11 @@ import {
   AngularFirestore,
   AngularFirestoreDocument,
 } from '@angular/fire/firestore';
+import { AngularFireStorage } from '@angular/fire/storage';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 import { AuthService } from '../core/auth.service';
 import { UserProfile } from '../core/user-profile.model';
 
@@ -19,15 +21,21 @@ export class ProfileComponent implements OnInit {
   public item: Observable<UserProfile>;
   private uid: string;
   public loading: boolean;
-  private error: string;
+  public error: string;
+  public downloadURL: Observable<string>;
+  public uploadProgress: Observable<number>;
 
   constructor(
     public auth: AuthService,
     public afs: AngularFirestore,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private afStorage: AngularFireStorage
   ) {
     this.loading = false;
     this.uid = this.route.snapshot.paramMap.get('id');
+    this.downloadURL = this.afStorage
+      .ref(`users/${this.uid}/profile-image`)
+      .getDownloadURL();
   }
 
   ngOnInit(): void {
@@ -70,5 +78,28 @@ export class ProfileComponent implements OnInit {
     }
 
     this.loading = false;
+  }
+
+  fileChange(event) {
+    this.downloadURL = null;
+    this.error = null;
+
+    const file = event.target.files[0];
+    const filePath = `users/${this.uid}/profile-image`;
+    const fileRef = this.afStorage.ref(filePath);
+
+    const task = this.afStorage.upload(filePath, file);
+    task.catch((error) => (this.error = error.message));
+
+    this.uploadProgress = task.percentageChanges();
+
+    task
+      .snapshotChanges()
+      .pipe(
+        finalize(() => {
+          this.downloadURL = fileRef.getDownloadURL();
+        })
+      )
+      .subscribe();
   }
 }
