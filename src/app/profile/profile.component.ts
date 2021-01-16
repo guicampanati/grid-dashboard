@@ -80,7 +80,7 @@ export class ProfileComponent implements OnInit {
     this.loading = false;
   }
 
-  fileChange(event) {
+  fileChange(event: { target: { files: string[] } }): void {
     this.downloadURL = null;
     this.error = null;
 
