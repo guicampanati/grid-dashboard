@@ -2,7 +2,7 @@ rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
     match /users/{userId}/{fileName} {
-      allow read, write: if request.auth.uid == userId;
+      allow read, write: if request.auth.uid == userId || request.token.admin == true;
     }
 
     // file is less than 5MB
