@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
 import { AuthService } from '../core/auth.service';
 
 @Component({
@@ -15,7 +14,6 @@ export class LoginComponent implements OnInit {
   error: string;
   constructor(
     private auth: AngularFireAuth,
-    private router: Router,
     private authService: AuthService
   ) {}
 
@@ -48,7 +46,7 @@ export class LoginComponent implements OnInit {
       }
 
       const uid = res.user.uid;
-      this.router.navigate([`/profile/${uid}`]);
+      this.authService.routeOnLogin(uid);
     } catch (err) {
       this.error = err.message;
     }
