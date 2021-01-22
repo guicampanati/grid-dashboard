@@ -1,5 +1,12 @@
 # GridDashboard
 
+### Features
+- firebase authentication
+- storing and syncing data with cloud firestore
+- storing files with cloud firestore
+- admin control access with custom claims and security rules
+- firebase cloud functions
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.2.
 
 ## Development server
